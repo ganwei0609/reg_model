@@ -1,0 +1,13 @@
+/home/share/pro/reg_model/my_transaction.sv  
+/home/share/pro/reg_model/my_driver.sv  
+/home/share/pro/reg_model/my_monitor.sv     
+/home/share/pro/reg_model/my_sequence.sv  
+/home/share/pro/reg_model/my_sequencer.sv  
+/home/share/pro/reg_model/my_agent.sv 
+/home/share/pro/reg_model/my_scoreboard.sv   
+/home/share/pro/reg_model/my_env.sv   
+/home/share/pro/reg_model/my_test.sv  
+/home/share/pro/reg_model/my_case0.sv  
+/home/share/pro/reg_model/my_dut.sv    
+/home/share/pro/reg_model/my_if.sv   
+/home/share/pro/reg_model/my_top.sv   
