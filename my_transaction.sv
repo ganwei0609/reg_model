@@ -10,6 +10,10 @@ class my_transaction extends uvm_sequence_item;
 	rand bit[15:0] wr_data;
 	rand bit[15:0] addr;
 	rand bus_op_e bus_op;
+	constraint addr_cons{
+		addr == 16'h9;
+	}
+
 	extern function new(string name = "my_transaction");
 
 	`uvm_object_utils_begin(my_transaction)

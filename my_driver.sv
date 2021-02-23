@@ -8,7 +8,6 @@ import uvm_pkg::*;
 class my_driver extends uvm_driver #(my_transaction);
 	`uvm_component_utils(my_driver)
 	virtual my_if vif;
-	uvm_analysis_port #(my_transaction) ap;
 	
 	function new(string name, uvm_component parent);
 		super.new(name, parent);
@@ -22,10 +21,9 @@ endclass
 
 function void my_driver::build_phase(uvm_phase phase);
 	super.build_phase(phase);
-	if(!uvm_config_db#(virtual my_if)::get(this, "", "my_if", vif)) begin
+	if(!uvm_config_db#(virtual my_if)::get(this, "", "vif", vif)) begin
 		`uvm_fatal("my_driver", "driver get interface failed");
 	end
-	ap = new("ap", this);
 endfunction
 
 
@@ -33,7 +31,7 @@ task my_driver::main_phase(uvm_phase phase);
 	while(1) begin
 		seq_item_port.get_next_item(req);
 		drive_one_pkt(req);
-		ap.write(req);
+		`uvm_info("my_driver", $sformatf("path=%s", get_full_name()), UVM_LOW);
 		seq_item_port.item_done();
 	end
 endtask
