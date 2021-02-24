@@ -30,7 +30,11 @@ module test_top;
 		end
 
 	end
-	
+	initial begin
+		reset = 1'b0;
+		repeat(10) @(posedge SystemClock);
+		reset = 1'b1;
+	end	
 	initial begin                                 
 		uvm_config_db#(virtual my_if)::set(null, "uvm_test_top.env.i_agt.drv", "vif", my_dut_if);
 		uvm_config_db#(virtual my_if)::set(null, "uvm_test_top.env.i_agt.mon", "vif", my_dut_if);

@@ -59,6 +59,9 @@ task my_scoreboard::main_phase(uvm_phase phase);
 		while(1) begin
 			act_port.get(get_actual);
 			`uvm_info("my_scoreboard", $sformatf("size=%d", expect_queue.size()), UVM_LOW);
+			while(expect_queue.size() == 0) begin
+				#10;
+			end
 			if(expect_queue.size() > 0) begin
 				tmp_tran = expect_queue.pop_front();
 				`uvm_info("my_scoreboard", $sformatf("path=%s", get_full_name()), UVM_LOW);

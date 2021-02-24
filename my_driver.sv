@@ -30,6 +30,14 @@ endfunction
 task my_driver::main_phase(uvm_phase phase);
 	while(1) begin
 		seq_item_port.get_next_item(req);
+		while(1) begin
+			if(vif.rst_n) begin
+				break;
+			end
+			else begin
+				@(posedge vif.clk);
+			end
+		end
 		drive_one_pkt(req);
 		`uvm_info("my_driver", $sformatf("path=%s", get_full_name()), UVM_LOW);
 		seq_item_port.item_done();

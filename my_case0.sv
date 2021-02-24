@@ -41,8 +41,9 @@ class my_sequence0 extends uvm_sequence#(my_transaction);
 	
 	virtual task body();
 		int unsigned sequence_count = 0;
-		repeat(10) begin
-			`uvm_do(trans);
+		repeat(20) begin
+			`uvm_do(trans);			
+			//`uvm_do_with(trans, {trans.bus_op == BUS_WR;})
 			`uvm_info("my_sequence0", $sformatf("send sequence %d", sequence_count), UVM_LOW);
 			sequence_count++;
 		end
