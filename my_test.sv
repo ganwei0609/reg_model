@@ -3,29 +3,46 @@
 class my_test extends uvm_test #(my_transaction);
 	`uvm_component_utils(my_test)
 	my_env env;
+	reg_model rm;
+	my_vsqr v_sqr;
+	my_adapter reg_sqr_adapter;
+	
 	extern function new(string name = "my_test", uvm_component parent = null);
 	extern virtual function void build_phase(uvm_phase phase);
-	extern task main_phase(uvm_phase phase);
+	extern function void connect_phase(uvm_phase phase);
 	extern function void final_phase(uvm_phase phase);
 
 endclass
 
 function my_test::new(string name = "my_test", uvm_component parent = null);
 	super.new(name, parent);
-	env = new("env", this);
 endfunction
 
 function void my_test::build_phase(uvm_phase phase);
 	super.build_phase(phase);
-	set_report_max_quit_count(30);
+	env = my_env::type_id::create("env", this);	
+	v_sqr = my_vsqr::type_id::create("v_sqr", this);
+	rm = reg_model::type_id::create("rm", this);
+	//parent block
+	//backdoor access path
+	rm.configure(null, "");
+	rm.build();
+	rm.lock_model();
+	rm.reset();
+	reg_sqr_adapter = my_adapter::type_id::create("req_sqr_adapter", this);	
+	env.p_rm = this.rm;
+	//set_report_max_quit_count(30);
 endfunction
 
-task my_test::main_phase(uvm_phase phase);
-	`uvm_info("main_phase", "Entered ...",UVM_LOW)
-    `uvm_info("main_phase",$sformatf("Setting the drain time in the main_phase of the base test to 6000000"),UVM_NONE) 
-    phase.phase_done.set_drain_time(this, (6000000));
-    `uvm_info("main_phase", "Exited ...",UVM_LOW)
-endtask // main_phase
+function void my_test::connect_phase(uvm_phase phase);
+	super.connect_phase(phase);
+	v_sqr.p_my_sqr = env.i_agt.sqr;
+	v_sqr.p_bus_sqr = env.bus_agt.sqr;
+	v_sqr.p_rm = this.rm;
+	rm.default_map.set_sequencer(env.bus_agt.sqr, reg_sqr_adapter);
+	rm.default_map.set_auto_predict(1);
+	uvm_top.print_topology();	
+endfunction
 
 /**
 * Calculate the pass or fail status for the test in the final phase method of the

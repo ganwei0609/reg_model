@@ -7,8 +7,10 @@ import uvm_pkg::*;
 class my_env extends uvm_env;
 	my_agent i_agt;
 	my_agent o_agt;
+	bus_agent bus_agt;
 	my_scoreboard scb;
 	my_model mdl;
+	reg_model p_rm;
 	uvm_tlm_analysis_fifo #(my_transaction) i_agt_mdl_fifo;
 	uvm_tlm_analysis_fifo #(my_transaction) mdl_scb_fifo;
 	uvm_tlm_analysis_fifo #(my_transaction) o_agt_scb_fifo;
@@ -26,9 +28,11 @@ endfunction
 function void my_env::build_phase(uvm_phase phase);
 	super.build_phase(phase);
 	i_agt = my_agent::type_id::create("i_agt", this);
-	o_agt = my_agent::type_id::create("o_agt", this);
 	i_agt.is_active = UVM_ACTIVE;
+	o_agt = my_agent::type_id::create("o_agt", this);
 	o_agt.is_active = UVM_PASSIVE;
+	bus_agt = bus_agent::type_id::create("bus_agt", this);
+	bus_agt.is_active = UVM_ACTIVE;
 	
 	scb = my_scoreboard::type_id::create("scb", this);
 	mdl = my_model::type_id::create("mdl", this);
@@ -40,8 +44,7 @@ function void my_env::build_phase(uvm_phase phase);
 endfunction
 
 function void my_env::connect_phase(uvm_phase phase);
-	super.build_phase(phase);
-	uvm_top.print_topology();
+	super.connect_phase(phase);
 	i_agt.ap.connect(i_agt_mdl_fifo.analysis_export);
 	mdl.in_port.connect(i_agt_mdl_fifo.blocking_get_export);
 	
@@ -50,6 +53,8 @@ function void my_env::connect_phase(uvm_phase phase);
 	
 	o_agt.ap.connect(o_agt_scb_fifo.analysis_export);
 	scb.act_port.connect(o_agt_scb_fifo.blocking_get_export);
+	
+	mdl.p_rm = this.p_rm;
 	//i_agt.ap.connect(scb.exp_port);
 	//o_agt.ap.connect(scb.act_port);
 	

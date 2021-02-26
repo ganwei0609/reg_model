@@ -17,12 +17,12 @@ endfunction
 
 task my_sequence::body();
 	int unsigned sequence_count = 0;
-	if(starting_phase != null) begin
-		starting_phase.raise_objection(this);
-	end
-	else begin
-		`uvm_info("my_sequence", "starting_phase == null", UVM_LOW);
-	end
+	//if(starting_phase != null) begin
+	//	starting_phase.raise_objection(this);
+	//end
+	//else begin
+	//	`uvm_info("my_sequence", "starting_phase == null", UVM_LOW);
+	//end
 		repeat(10) begin
 			`uvm_info("my_sequence", $sformatf("send sequence %d", sequence_count), UVM_LOW);
 			`uvm_do(tr);
@@ -32,9 +32,9 @@ task my_sequence::body();
 		end
 		#100;
 	
-	if(starting_phase != null) begin
-		starting_phase.drop_objection(this);
-	end
+	//if(starting_phase != null) begin
+	//	starting_phase.drop_objection(this);
+	//end
 
 endtask
 `endif

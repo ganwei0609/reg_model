@@ -37,7 +37,6 @@ task my_monitor::main_phase(uvm_phase phase);
 		`uvm_info("my_monitor", $sformatf("path=%s", get_full_name()), UVM_LOW);		
 		ap.write(tr);
 	end
-
 endtask
 
 task my_monitor::receive_one_pkt(ref my_transaction get_pkt);

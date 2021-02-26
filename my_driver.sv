@@ -4,7 +4,6 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
 
-
 class my_driver extends uvm_driver #(my_transaction);
 	`uvm_component_utils(my_driver)
 	virtual my_if vif;
@@ -28,16 +27,10 @@ endfunction
 
 
 task my_driver::main_phase(uvm_phase phase);
+	while(!vif.rst_n)
+		@(posedge vif.clk);
 	while(1) begin
 		seq_item_port.get_next_item(req);
-		while(1) begin
-			if(vif.rst_n) begin
-				break;
-			end
-			else begin
-				@(posedge vif.clk);
-			end
-		end
 		drive_one_pkt(req);
 		`uvm_info("my_driver", $sformatf("path=%s", get_full_name()), UVM_LOW);
 		seq_item_port.item_done();
@@ -75,7 +68,7 @@ task my_driver::drive_one_pkt(my_transaction tr);
 		tr.rd_data <= vif.bus_rd_data;
 		$display("@%0t, rd_data is %0h", $time, tr.rd_data);
 	end
-	`uvm_info("bus_driver", "end drive one pkt", UVM_LOW);
+	`uvm_info("my_driver", "end drive one pkt", UVM_LOW);
 endtask
 
 `endif
