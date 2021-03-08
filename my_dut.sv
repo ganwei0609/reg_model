@@ -17,6 +17,7 @@ module my_dut(clk, rst_n, bus_cmd_valid, bus_op, bus_addr, bus_wr_data, bus_rd_d
 	reg[7:0] txd;
 	reg tx_en;
 	reg invert;
+	reg [31:0] counter;
 
 always @(posedge clk) begin
 	if(!rst_n) begin

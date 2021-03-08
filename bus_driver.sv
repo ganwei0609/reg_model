@@ -28,13 +28,13 @@ task bus_driver::run_phase(uvm_phase phase);
 	`uvm_info("bus_driver", "run_phase begin loop", UVM_LOW)
 	while(1) begin
 		seq_item_port.get_next_item(req);
-		`uvm_info("bus_driver", "get one req", UVM_LOW)
 		drive_one_pkt(req);
 		seq_item_port.item_done();
 	end
 endtask
 task bus_driver::drive_one_pkt(bus_transaction tr);
-	`uvm_info("bus_driver", "begin to drive one pkt", UVM_LOW)
+	`uvm_info("bus_driver", "drive one pkt", UVM_LOW)
+	tr.print();
 	repeat(1) @(posedge vif.clk);
 
 	vif.bus_cmd_valid <= 1'b1;
@@ -52,6 +52,5 @@ task bus_driver::drive_one_pkt(bus_transaction tr);
 	if(tr.bus_op == BUS_RD) begin
 		tr.rd_data = vif.bus_rd_data;
 	end
-	`uvm_info("bus_driver", "finish drive one pkt", UVM_LOW)	
 endtask
 `endif

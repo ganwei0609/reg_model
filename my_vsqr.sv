@@ -3,7 +3,8 @@
 class my_vsqr extends uvm_sequencer;
 	my_sequencer p_my_sqr;
 	bus_sequencer p_bus_sqr;
-	reg_model p_rm;
+	ral_block_ganwei_reg_map p_rm;
+	my_cov cov;
 	
 	`uvm_component_utils(my_vsqr)
 	extern function new(string name, uvm_component parent);

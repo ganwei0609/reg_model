@@ -3,7 +3,7 @@
 class my_test extends uvm_test #(my_transaction);
 	`uvm_component_utils(my_test)
 	my_env env;
-	reg_model rm;
+	ral_block_ganwei_reg_map rm;
 	my_vsqr v_sqr;
 	my_adapter reg_sqr_adapter;
 	
@@ -22,13 +22,14 @@ function void my_test::build_phase(uvm_phase phase);
 	super.build_phase(phase);
 	env = my_env::type_id::create("env", this);	
 	v_sqr = my_vsqr::type_id::create("v_sqr", this);
-	rm = reg_model::type_id::create("rm", this);
+	rm = ral_block_ganwei_reg_map::type_id::create("rm", this);
 	//parent block
 	//backdoor access path
 	rm.configure(null, "");
 	rm.build();
 	rm.lock_model();
 	rm.reset();
+	rm.set_hdl_path_root("test_top.test_dut");
 	reg_sqr_adapter = my_adapter::type_id::create("req_sqr_adapter", this);	
 	env.p_rm = this.rm;
 	//set_report_max_quit_count(30);
@@ -39,6 +40,7 @@ function void my_test::connect_phase(uvm_phase phase);
 	v_sqr.p_my_sqr = env.i_agt.sqr;
 	v_sqr.p_bus_sqr = env.bus_agt.sqr;
 	v_sqr.p_rm = this.rm;
+	v_sqr.cov = env.cov;
 	rm.default_map.set_sequencer(env.bus_agt.sqr, reg_sqr_adapter);
 	rm.default_map.set_auto_predict(1);
 	uvm_top.print_topology();	

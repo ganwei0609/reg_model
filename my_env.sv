@@ -10,7 +10,8 @@ class my_env extends uvm_env;
 	bus_agent bus_agt;
 	my_scoreboard scb;
 	my_model mdl;
-	reg_model p_rm;
+	my_cov cov;
+	ral_block_ganwei_reg_map p_rm;
 	uvm_tlm_analysis_fifo #(my_transaction) i_agt_mdl_fifo;
 	uvm_tlm_analysis_fifo #(my_transaction) mdl_scb_fifo;
 	uvm_tlm_analysis_fifo #(my_transaction) o_agt_scb_fifo;
@@ -36,7 +37,8 @@ function void my_env::build_phase(uvm_phase phase);
 	
 	scb = my_scoreboard::type_id::create("scb", this);
 	mdl = my_model::type_id::create("mdl", this);
-
+	cov = my_cov::type_id::create("cov", this);
+	
 	i_agt_mdl_fifo = new("i_agt_mdl_fifo", this);
 	mdl_scb_fifo = new("mdl_scb_fifo", this);
 	o_agt_scb_fifo = new("o_agt_scb_fifo", this);

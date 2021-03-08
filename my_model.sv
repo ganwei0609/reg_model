@@ -6,7 +6,7 @@ import uvm_pkg::*;
 class my_model extends uvm_component;
 	uvm_blocking_get_port #(my_transaction) in_port;
 	uvm_analysis_port #(my_transaction) out_port;	
-	reg_model p_rm;
+	ral_block_ganwei_reg_map p_rm;
 	`uvm_component_utils(my_model)
 	extern function new(string name, uvm_component parent);
 	extern function void build_phase(uvm_phase phase);

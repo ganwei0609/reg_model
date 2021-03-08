@@ -9,7 +9,7 @@ module test_top;
 	bus_if b_if(SystemClock, reset);
 
 	
-	my_dut dut(
+	my_dut test_dut(
 		.clk				(SystemClock), 
 		.rst_n				(reset), 
 		.bus_cmd_valid		(b_if.bus_cmd_valid), 
@@ -35,6 +35,7 @@ module test_top;
 	initial begin
 		reset = 1'b0;
 		repeat(10) @(posedge SystemClock);
+		test_dut.counter = 32'hfffd;
 		reset = 1'b1;
 	end	
 	initial begin                                 
